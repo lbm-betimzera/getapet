@@ -117,5 +117,45 @@ module.exports = class UserController {
 
     }
 
+    static async getUserById(req, res){
+        const id = req.params.id
+
+        try {
+            const user = await User.findById(id).select('-password')
+
+            if(!user){
+                res.status(422).json({
+                    message: 'Usuario não encontrado',
+               })
+                return
+             }
+             res.status(200).json({ user })
+        } catch (error) {
+            res.status(422).json({
+                message: 'Usuario não encontrado',
+           })
+        }
+    }
+
+    static async editUser(req, res){
+        let user = ''
+        const id = req.params.id
+        try {
+            user = await User.findById(ObjectId(id))
+
+        } catch (error) {
+            console.log(error)
+            res.status(422).json({
+            message: 'Usuário não encontrado!',
+           })
+        }
+        console.log(user)
+        if(!user){
+            res.status(422).json({
+                message: 'Usuário não encontrado!',
+           })
+           return
+        }
+    }
 
 }
